@@ -18,6 +18,12 @@ Il gioco consiste nel controllare un serpente che si muove all'interno del termi
 ## Dipendenze
 
 * Libreria ncurses
+* Se stai utilizzando una distribuzione Linux basata su Debian o Ubuntu (come Ubuntu, Debian, Linux Mint, ecc.), puoi installare ncurses utilizzando il seguente comando:
+
+```bash
+sudo apt-get update
+sudo apt-get install libncurses-dev
+ ```
 
 ## Come Compilare ed Eseguire
 
