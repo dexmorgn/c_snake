@@ -63,4 +63,4 @@ sudo apt-get install libncurses-dev
 dexmorgn
 ## Licenza
 
-Questo progetto è distribuito sotto \[Nome della licenza].
+Questo progetto è distribuito sotto dexmorgn.
