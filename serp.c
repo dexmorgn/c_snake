@@ -247,7 +247,7 @@ void aggiungiInCoda(Anello *testa, WINDOW **punteggio) {
 
     contatore += 1;
 
-        if(contatore == area) {
+        if(contatore == area - 1) {
             while(testa != NULL) {
                 temp = testa;
                 testa = testa->next;
