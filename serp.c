@@ -80,14 +80,13 @@ int main(void) {
 
         getch();
 
-    endwin();
-
-    temp = testa;
+        temp = testa;
         while(testa != NULL) {
             temp = testa;
             testa = testa->next;
             free(temp);
         }
+    endwin();
 }
 
 
