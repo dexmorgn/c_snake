@@ -23,6 +23,7 @@ void perso();
 
 int main(void) {
     Anello *testa = (Anello*)malloc(sizeof(Anello));
+    Anello *temp;
     testa = NULL;
     int muovi, rigaCasuale, colonnaCasuale, punteggio = 0;
     srand(time(NULL));
@@ -44,19 +45,15 @@ int main(void) {
         cbreak();
         curs_set(0);
 
-        box(stdscr, 0 , 0);
+        box(stdscr, '|', '-');
         refresh();
 
                 //finestra del punteggio
         WINDOW *winPunteggio = newwin(3, 17, 1, 1);
         aggiornaPunteggio(punteggio, &winPunteggio);
 
-        Anello *temp = testa;
-            while(temp != NULL) {
-                mvaddch(temp->riga, temp->colonna, 'O');
-                temp = temp->next;
-                refresh();
-            } 
+        mvaddch(primo->riga, primo->colonna, 'O');
+        refresh();
 
             //printo le prime mele casuali
 
@@ -73,19 +70,13 @@ int main(void) {
             colonnaCasuale = 1 + (rand() % ((18 - 1) + 1));
             mvaddch(rigaCasuale, colonnaCasuale, 'X'| A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
 
+        refresh();
         muovi = getch();
         nodelay(stdscr, TRUE);
         timeout(0);
         muoviCarattere(testa, 'O', muovi, punteggio, &winPunteggio);
 
-        getch();
 
-        temp = testa;
-        while(testa != NULL) {
-            temp = testa;
-            testa = testa->next;
-            free(temp);
-        }
     endwin();
 }
 
@@ -131,10 +122,13 @@ void muoviCarattere(Anello *testa, char serpente, int muovi, int punteggio, WIND
                         prev.colonna = temp->colonna + 1;
                         prev.riga = temp->riga;
 
-                            punteggio = stampaMelaRightDown(prev, testa, punteggio, &(*aggiorna));
-
+                        if((punteggio = stampaMelaLeftUp(prev, testa, punteggio, &(*aggiorna))) == -1) {
+                            return;
+                        } else {
                             movimento(temp, prev, prevI);
                         }
+                        
+                    }
                 }
             muoviCarattere(testa, serpente, mossa, punteggio, &(*aggiorna));
             break;
@@ -161,12 +155,15 @@ void muoviCarattere(Anello *testa, char serpente, int muovi, int punteggio, WIND
                                     free(temp);
                                 }
                                 perso(&(*aggiorna));
+                                return;
                             }
                             
                         
-                            punteggio = stampaMelaLeftUp(prev, testa, punteggio, &(*aggiorna));
-                         
-                            movimento(temp, prev, prevI);
+                            if((punteggio = stampaMelaLeftUp(prev, testa, punteggio, &(*aggiorna))) == -1) {
+                                return;
+                            } else {
+                                movimento(temp, prev, prevI);
+                           }
                     }
                 }
             muoviCarattere(testa, serpente, mossa, punteggio, &(*aggiorna));                      
@@ -180,10 +177,12 @@ void muoviCarattere(Anello *testa, char serpente, int muovi, int punteggio, WIND
                         prev.colonna = temp->colonna;
                         prev.riga = temp->riga + 1;
                         
-                            punteggio = stampaMelaRightDown(prev, testa, punteggio, &(*aggiorna));
-
+                        if((punteggio = stampaMelaLeftUp(prev, testa, punteggio, &(*aggiorna))) == -1) {
+                            return;
+                        } else {
                             movimento(temp, prev, prevI);
                             usleep(30000);
+                        }
                     }
                 }
             muoviCarattere(testa, serpente, mossa, punteggio, &(*aggiorna));                      
@@ -197,7 +196,7 @@ void muoviCarattere(Anello *testa, char serpente, int muovi, int punteggio, WIND
                         prev.colonna = temp->colonna;
                         prev.riga = temp->riga - 1;
 
-                        if(prev.riga == 2 && prev.colonna < 18) {
+                        if(prev.riga == 3 && prev.colonna < 18) {
                             wborder(*aggiorna, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
                             delwin(*aggiorna);
                             wborder(stdscr, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -209,12 +208,15 @@ void muoviCarattere(Anello *testa, char serpente, int muovi, int punteggio, WIND
                                 free(temp);
                             }
                             perso(&(*aggiorna));
+                            return;
                         }
                             
-                            punteggio = stampaMelaLeftUp(prev, testa, punteggio, &(*aggiorna));
-                            
-                            movimento(temp, prev, prevI);
-                            usleep(30000);
+                            if((punteggio = stampaMelaLeftUp(prev, testa, punteggio, &(*aggiorna))) == -1) {
+                                return;
+                            } else {
+                                movimento(temp, prev, prevI);
+                                usleep(30000);
+                            }
                     }
                 }
             muoviCarattere(testa, serpente, mossa, punteggio, &(*aggiorna));                      
@@ -281,7 +283,7 @@ int stampaMelaRightDown(Anello prev, Anello *testa, int punteggio, WINDOW **aggi
         colonnaCasuale = 1 + (rand() % ((18 - 1) + 1));
         mvaddch(rigaCasuale, colonnaCasuale, 'X' | A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
         aggiornaPunteggio(punteggio, &(*aggiorna));
-    } else if(mvwinch(stdscr, prev.riga, prev.colonna) == ACS_VLINE || mvwinch(stdscr, prev.riga, prev.colonna) == ACS_HLINE) {
+    } else if(mvwinch(stdscr, prev.riga, prev.colonna) == '-' || mvwinch(stdscr, prev.riga, prev.colonna) == '|') {
         wborder(*aggiorna, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
         delwin(*aggiorna);
         wborder(stdscr, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -293,6 +295,7 @@ int stampaMelaRightDown(Anello prev, Anello *testa, int punteggio, WINDOW **aggi
             free(temp);
         }
         perso(&(*aggiorna));
+        return -1;
     } else if(mvwinch(stdscr, prev.riga, prev.colonna) == 'O') {
         wborder(*aggiorna, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
         delwin(*aggiorna);
@@ -305,6 +308,7 @@ int stampaMelaRightDown(Anello prev, Anello *testa, int punteggio, WINDOW **aggi
             free(temp);
         }
         perso(&(*aggiorna));
+        return -1;
     } 
 
 
@@ -323,7 +327,7 @@ int stampaMelaLeftUp(Anello prev, Anello *testa, int punteggio, WINDOW **aggiorn
         colonnaCasuale = 18 + (rand() % ((x - 2) -17));
         mvaddch(rigaCasuale, colonnaCasuale, 'X'| A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
         aggiornaPunteggio(punteggio, &(*aggiorna));
-    } else if(mvwinch(stdscr, prev.riga, prev.colonna) == ACS_VLINE || mvwinch(stdscr, prev.riga, prev.colonna) == ACS_HLINE) {
+    } else if(mvwinch(stdscr, prev.riga, prev.colonna) == '-' || mvwinch(stdscr, prev.riga, prev.colonna) == '|') {
         wborder(*aggiorna, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
         delwin(*aggiorna);
         wborder(stdscr, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -335,6 +339,7 @@ int stampaMelaLeftUp(Anello prev, Anello *testa, int punteggio, WINDOW **aggiorn
             free(temp);
         }
         perso(&(*aggiorna));
+        return -1;
     } else if(mvwinch(stdscr, prev.riga, prev.colonna) == 'O') {
         wborder(*aggiorna, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
         delwin(*aggiorna);
@@ -347,6 +352,7 @@ int stampaMelaLeftUp(Anello prev, Anello *testa, int punteggio, WINDOW **aggiorn
             free(temp);
         }
         perso(&(*aggiorna));
+        return -1;
     } 
 
 
@@ -370,10 +376,15 @@ void perso() {
     mvwprintw(perso, 3, 4, "HAI PERSO!!!"); //Scrive nella finestra
     wattroff(perso, A_REVERSE);
     move(0, 0);
-    echo();
+    nodelay(stdscr, FALSE);
     wgetch(perso);
+    mvwprintw(perso, 3, 4, "            ");
+    wborder(perso, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    wmove(stdscr, 0, 0);
+    wmove(perso, 0, 0);
+    wrefresh(perso);
     delwin(perso);
-    exit(1);
+    return;
 }
 
 
