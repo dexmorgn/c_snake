@@ -62,16 +62,16 @@ int main(void) {
 
             rigaCasuale = 1 + (rand() % (LINES - 2));
             colonnaCasuale = 18 + (rand() % ((COLS - 2) -17));
-            mvaddch(rigaCasuale, colonnaCasuale, 'X');
+            mvaddch(rigaCasuale, colonnaCasuale, 'X'| A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
             rigaCasuale = 1 + (rand() % (LINES - 2));
             colonnaCasuale = 18 + (rand() % ((COLS - 2) -17));
-            mvaddch(rigaCasuale, colonnaCasuale, 'X');
+            mvaddch(rigaCasuale, colonnaCasuale, 'X'| A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
             rigaCasuale = 4 + (rand() % ((LINES - 2) - 3));
             colonnaCasuale = 1 + (rand() % ((18 - 1) + 1));
-            mvaddch(rigaCasuale, colonnaCasuale, 'X');
+            mvaddch(rigaCasuale, colonnaCasuale, 'X'| A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
             rigaCasuale = 4 + (rand() % ((LINES - 2) - 3));
             colonnaCasuale = 1 + (rand() % ((18 - 1) + 1));
-            mvaddch(rigaCasuale, colonnaCasuale, 'X');
+            mvaddch(rigaCasuale, colonnaCasuale, 'X'| A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
 
         muovi = getch();
         nodelay(stdscr, TRUE);
@@ -274,13 +274,13 @@ int stampaMelaRightDown(Anello prev, Anello *testa, int punteggio, WINDOW **aggi
     int y, x, rigaCasuale, colonnaCasuale;
     Anello *temp;
 
-    if(mvwinch(stdscr, prev.riga, prev.colonna) == 'X') {
+    if((mvwinch(stdscr, prev.riga, prev.colonna) & A_CHARTEXT) == 'X') {
         aggiungiInCoda(testa, &(*aggiorna));
         punteggio += 1;
         getmaxyx(stdscr, y, x);
         rigaCasuale = 4 + (rand() % ((y - 2) - 3));
         colonnaCasuale = 1 + (rand() % ((18 - 1) + 1));
-        mvaddch(rigaCasuale, colonnaCasuale, 'X');
+        mvaddch(rigaCasuale, colonnaCasuale, 'X' | A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
         aggiornaPunteggio(punteggio, &(*aggiorna));
     } else if(mvwinch(stdscr, prev.riga, prev.colonna) == ACS_VLINE || mvwinch(stdscr, prev.riga, prev.colonna) == ACS_HLINE) {
         wborder(*aggiorna, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -316,13 +316,13 @@ int stampaMelaLeftUp(Anello prev, Anello *testa, int punteggio, WINDOW **aggiorn
     int y, x, rigaCasuale, colonnaCasuale;
     Anello *temp;
 
-    if(mvinch(prev.riga, prev.colonna) == 'X') {
+    if((mvinch(prev.riga, prev.colonna) & A_CHARTEXT) == 'X') {
         aggiungiInCoda(testa, &(*aggiorna));
         punteggio += 1;
         getmaxyx(stdscr, y, x);
         rigaCasuale = 1 + (rand() % (y - 2));
         colonnaCasuale = 18 + (rand() % ((x - 2) -17));
-        mvaddch(rigaCasuale, colonnaCasuale, 'X');
+        mvaddch(rigaCasuale, colonnaCasuale, 'X'| A_BOLD | A_BLINK | A_REVERSE | A_STANDOUT);
         aggiornaPunteggio(punteggio, &(*aggiorna));
     } else if(mvwinch(stdscr, prev.riga, prev.colonna) == ACS_VLINE || mvwinch(stdscr, prev.riga, prev.colonna) == ACS_HLINE) {
         wborder(*aggiorna, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
