@@ -278,8 +278,8 @@ void finestraPunteggio(WINDOW **win_punteggio, int *punteggio_ptr, int *ultimo_p
     mvwprintw(*win_punteggio, 1, 2, "PUNTEGGIO: %d", *punteggio_ptr);
     wattroff(*win_punteggio, A_REVERSE);
     wattron(*win_punteggio, COLOR_PAIR(2) | A_BOLD | A_STANDOUT);
-    mvwprintw(*win_punteggio, 1, COLS/2 - 9, "GIOCO DEL SERPENTE");
-    mvwprintw(*win_punteggio, 1, COLS - 22, "ULTIMO PUNTEGGIO: %d", *ultimo_punteggio);
+    mvwprintw(*win_punteggio, 1, COLS/2 - 8, "GIOCO DEL SERPENTE");
+    mvwprintw(*win_punteggio, 1, COLS - 23, "ULTIMO PUNTEGGIO: %d", *ultimo_punteggio);
     wattroff(*win_punteggio, COLOR_PAIR(2) | A_BOLD | A_STANDOUT);
     box(*win_punteggio, 0, 0);
     wrefresh(*win_punteggio);
@@ -475,9 +475,7 @@ int reverseSceltaMenu(WINDOW **menu, char *opzioni[], int posizioneCursore) {
 
 void eliminaMenu(WINDOW **menu) {
     //semplice funzione per eliminare la finestra del menu
-    wborder(*menu, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-    mvwaddstr(*menu, 3, 7, "     ");
-    mvwaddstr(*menu, 4, 7,"    ");
+    wclear(*menu);
     wrefresh(*menu);
     delwin(*menu);
 }
