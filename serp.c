@@ -56,7 +56,7 @@ int main() {
 
             //inizializzo i colori
             init_pair(1, COLOR_GREEN, COLOR_BLACK);
-            init_pair(2, COLOR_CYAN, COLOR_GREEN);
+            init_pair(2, COLOR_GREEN, COLOR_BLACK);
             init_pair(3, COLOR_RED, COLOR_YELLOW);  
 
                     //inizializzo lo schermo menu
@@ -277,10 +277,10 @@ void finestraPunteggio(WINDOW **win_punteggio, int *punteggio_ptr, int *ultimo_p
     wattron(*win_punteggio, A_REVERSE);
     mvwprintw(*win_punteggio, 1, 2, "PUNTEGGIO: %d", *punteggio_ptr);
     wattroff(*win_punteggio, A_REVERSE);
-    wattron(*win_punteggio, COLOR_PAIR(2) | A_BOLD | A_STANDOUT);
-    mvwprintw(*win_punteggio, 1, COLS/2 - 8, "GIOCO DEL SERPENTE");
+    wattron(*win_punteggio, COLOR_PAIR(2) | A_BOLD | A_REVERSE);
+    mvwprintw(*win_punteggio, 1, COLS/2 - 9, "GIOCO DEL SERPENTE");
     mvwprintw(*win_punteggio, 1, COLS - 23, "ULTIMO PUNTEGGIO: %d", *ultimo_punteggio);
-    wattroff(*win_punteggio, COLOR_PAIR(2) | A_BOLD | A_STANDOUT);
+    wattroff(*win_punteggio, COLOR_PAIR(2) | A_BOLD | A_REVERSE);
     box(*win_punteggio, 0, 0);
     wrefresh(*win_punteggio);
     refresh();
